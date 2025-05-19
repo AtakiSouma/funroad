@@ -1,0 +1,6 @@
+// {
+//     "typescript.tsdk": "node_modules/typescipt/lib",
+//     "typescript.enablePromptUseWorkspaceTsdk": true,
+//     //   "typescript.validate.enable": false
+
+// }
