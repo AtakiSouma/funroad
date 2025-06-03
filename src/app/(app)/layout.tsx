@@ -4,6 +4,7 @@ import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/client";
 // import ProgressBar from "@/components/progress-bar";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,12 @@ export default function RootLayout({
       {/* <ProgressBar /> */}
 
       <body className={`${dm_Sans.className}antialiased`}>
-        <TRPCReactProvider>
-          <Toaster/>
-          {children}</TRPCReactProvider>
+        <NuqsAdapter>
+          <TRPCReactProvider>
+            <Toaster />
+            {children}
+          </TRPCReactProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

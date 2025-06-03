@@ -1,6 +1,7 @@
-// {
-//     "typescript.tsdk": "node_modules/typescipt/lib",
-//     "typescript.enablePromptUseWorkspaceTsdk": true,
-//     //   "typescript.validate.enable": false
+{
+    "typescript.tsdk": "node_modules/typescipt/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "mos.port": "",
+    //   "typescript.validate.enable": false
 
-// }
+}

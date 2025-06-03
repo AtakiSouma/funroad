@@ -1,9 +1,9 @@
-import Footer from "@/components/home/footer/footer";
-import { Navbar } from "@/components/home/navbar/navbar";
+import Footer from "@/modules/home/ui/components/footer";
 import React, { Suspense } from "react";
 import { SearchFilter, SearchFilterLoading } from "./search-filters";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Navbar } from "@/modules/home/ui/components/navbar";
 
 interface HomeLayoutProps {
   children: React.ReactNode;

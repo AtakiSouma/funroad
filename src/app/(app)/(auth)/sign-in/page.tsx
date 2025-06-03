@@ -1,10 +1,10 @@
-import SignInView from "@/modules/auth/ui/views/sign-in-view";
+import SignInView from "@/modules/auth/ui/views/sign-up-view";
 
 interface SignInPageProps {}
 
 const SignInPage = ({}: SignInPageProps) => {
   return (
-    <div>
+    <div className="">
       <SignInView />
     </div>
   );
