@@ -13,7 +13,8 @@ import { Videos } from './collections/Videos'
 import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
 import { Tags } from './collections/Tags'
-
+import { Tenants } from './collections/Tenants'
+import {multiTenantPlugin} from "@payloadcms/plugin-multi-tenant"
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media,Videos,Categories,Products,Tags],
+  collections: [Users, Media,Videos,Categories,Products,Tags,Tenants],
   editor: lexicalEditor(),
   cookiePrefix:"funroad",
   secret: process.env.PAYLOAD_SECRET || '1b85b1345f43d5aaf4e6712b',
@@ -37,6 +38,15 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
+    multiTenantPlugin({
+      collections:{
+        products: {}
+      },
+      tenantsArrayField: {
+        includeDefaultField: false,
+      },
+      userHasAccessToAllTenants: (user) => Boolean(user?.roles?.includes("super-admin"))
+    })
     // storage-adapter-placeholder
   ],
 })

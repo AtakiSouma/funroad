@@ -1,13 +1,17 @@
+import { formatCurrency } from "@/utils/currency/format";
+import { generateTenantURL } from "@/utils/generate/generate-tenant-url";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 interface ProductCardsProps {
   id: string;
   name: string;
   imageUrl?: string | null;
-  authorUsername: string;
-  authorImageUrl?: string | null;
+  tenantSlug: string;
+  tenantImageUrl?: string | null;
   reviewRating: number;
   reviewCount: number;
   price: number;
@@ -17,12 +21,19 @@ const ProductCards = ({
   id,
   name,
   imageUrl,
-  authorUsername,
-  authorImageUrl,
+  tenantSlug,
+  tenantImageUrl,
   reviewCount,
   reviewRating,
   price,
 }: ProductCardsProps) => {
+  const router = useRouter();
+  const handleUserClickToTenant = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    router.push(generateTenantURL(tenantSlug));
+  };
   return (
     <Link href={`/products/${id}`}>
       <div
@@ -34,23 +45,26 @@ const ProductCards = ({
           <Image
             alt={name}
             fill
-            src={imageUrl || "/placeholder.png"}
+            src={imageUrl ?? "/placeholder.png"}
             className="object-cover"
           />
         </div>
         <div className="p-4 border-t flex flex-col gap-3 flex-1 border-primary">
           <h2 className="text-lg font-medium line-clamp-4">{name}</h2>
-          <div className="flex items-center gao-2">
-            {authorImageUrl && (
+          <div
+            className="flex items-center gap-2"
+            onClick={handleUserClickToTenant}
+          >
+            {tenantImageUrl && (
               <Image
-                src={authorImageUrl}
-                alt={authorUsername}
-                width={16}
-                height={16}
+                src={tenantImageUrl}
+                alt={tenantSlug}
+                width={20}
+                height={20}
                 className="rounded-full border border-primary shrink-0 size-[16px]"
               />
             )}
-            <p className="text-sm underline font-medium">{authorUsername}</p>
+            <p className="text-sm underline font-medium">{tenantSlug}</p>
           </div>
           {reviewCount > 0 && (
             <div className="flex items-center gap-1">
@@ -63,12 +77,7 @@ const ProductCards = ({
         </div>
         <div className="p-4 border-t-1 border-primary">
           <div className="relative px-2 py-1 border border-primary bg-pink-400 w-fit">
-            <p className="text-sm font-medium">
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-              }).format(Number(price))}
-            </p>
+            <p className="text-sm font-medium">{formatCurrency(price)}</p>
           </div>
         </div>
       </div>

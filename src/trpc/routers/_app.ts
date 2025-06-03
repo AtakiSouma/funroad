@@ -4,11 +4,13 @@ import { categoriesRouter } from "@/modules/categories/server/procedures";
 import { authRouter } from "@/modules/auth/server/procedure";
 import { productRouter } from "@/modules/products/server/procedure";
 import { tagsRouter } from "@/modules/tags/server/procedures";
+import { tenantsRouter } from "@/modules/tenants/server/procedure";
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   products:productRouter,
   categories: categoriesRouter,
   tags: tagsRouter,
+  tenants: tenantsRouter,
   hello: baseProcedure
     .input(
       z.object({
