@@ -12,6 +12,7 @@ import { Media } from './collections/Media'
 import { Videos } from './collections/Videos'
 import { Categories } from './collections/Categories'
 import { Products } from './collections/Products'
+import { Tags } from './collections/Tags'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media,Videos,Categories,Products],
+  collections: [Users, Media,Videos,Categories,Products,Tags],
   editor: lexicalEditor(),
   cookiePrefix:"funroad",
   secret: process.env.PAYLOAD_SECRET || '1b85b1345f43d5aaf4e6712b',

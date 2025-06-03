@@ -2,7 +2,8 @@ import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { Category } from "@/payload-types";
 import { resolve } from "path";
 import { z } from "zod";
-import { Where } from "payload";
+import { Sort, Where } from "payload";
+import { sortValues } from "../searchParam";
 export const productRouter = createTRPCRouter({
   getMany: baseProcedure
     .input(
@@ -10,20 +11,50 @@ export const productRouter = createTRPCRouter({
         category: z.string().nullable().optional(),
         minPrice: z.string().nullable().optional(),
         maxPrice: z.string().nullable().optional(),
+        tags: z.array(z.string()).nullable().optional(),
+        sort: z.enum(sortValues).nullable().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const where: Where = {};
-      if (input.minPrice) {
+      let sort: Sort = "-createdAt";
+
+      if (input.sort === "trending") {
+        sort = "-createdAt";
+      }
+      if (input.sort === "curated") {
+        sort = "-createdAt";
+      }
+      if (input.sort === "hot_and_new") {
+        sort = "+createdAt";
+      }
+
+      if (input.minPrice && input.maxPrice) {
+        where.price = {
+          greater_than_equal: input.minPrice,
+          less_than_equal: input.maxPrice,
+        };
+      } else if (input.minPrice) {
         where.price = {
           greater_than_equal: input.minPrice,
         };
-      }
-      if (input.maxPrice) {
+      } else if (input.maxPrice) {
         where.price = {
           less_than_equal: input.maxPrice,
         };
       }
+      // where.price = {
+      //   ...where.price,
+      //   greater_than_equal: input.minPrice,
+      // };
+
+      // if (input.maxPrice) {
+
+      //   where.price = {
+      //     ...where.price,
+      //     less_than_equal: input.maxPrice,
+      //   };
+      // }
       if (input.category) {
         const categoriesData = await ctx.db.find({
           collection: "categories",
@@ -58,12 +89,16 @@ export const productRouter = createTRPCRouter({
           };
         }
       }
-
+      if (input.tags && input.tags.length > 0) {
+        where["tags.name"] = {
+          in: input.tags,
+        };
+      }
       const data = await ctx.db.find({
         collection: "products",
         depth: 1,
         pagination: true,
-        sort: "name",
+        sort: sort,
         where: where,
       });
 
